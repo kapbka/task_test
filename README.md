@@ -2,9 +2,9 @@
 * `client/client.go` generates and ingests metrics data for the past 5 minutes with 60 milliseconds interval
 * `migrations/1_metrics.up.sql` contains schema table for metrics
 * `pkg/api.api.go` contains API to return metrics data for any time range
-* `pkg/db/db.go` starts PostgreSQL db, creates connects and if necessary deploys schema
+* `pkg/db/db.go` starts PostgreSQL db, creates connection and if necessary deploys schema
 * `pkg/db/models/metrics.go` provides API to insert metrics data to DB and get metrics data from DB
-* `server/main.go` starts DB, creates route and listen to the requests
+* `server/main.go` starts DB, creates a route and listen to requests
 
 # Build
 ### Generate and ingest data 

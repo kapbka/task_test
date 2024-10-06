@@ -28,21 +28,14 @@ services:
       db:
         condition: service_healthy
 
-  generator:
-    build: .
-    command: [ "/app/bin/client" ]
-    environment:
-      - DATABASE_URL=postgresql://postgres:postgres@db/postgres?sslmode=disable
-    depends_on:
-      api:
-        condition: service_healthy
-
   test:
     build: .
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db/postgres?sslmode=disable
     command:
       - bash
       - -c
-      - curl "http://api:8080/metrics?from_ts=0&to_ts=$$(date +%s)" | grep concurrency
+      - /app/bin/client && curl "http://api:8080/metrics?from_ts=0&to_ts=$$(date +%s)" | grep concurrency
     depends_on:
-      generator:
-        condition: service_completed_successfully
+      api:
+          condition: service_healthy
