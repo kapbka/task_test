@@ -27,10 +27,10 @@ func StartAPI(pgdb *pg.DB) *chi.Mux {
 
 	// Add middleware
 	// In this case we will store our DB to use it later
-	r.Use(middleware.Logger, middleware.WithValue("DB", pgdb))
+	r.Use(middleware.Logger)
 
-	r.Route("/metrics", func(r chi.Router) {
-		r.Get("/", getMetrics)
+	r.Get("/metrics", func(w http.ResponseWriter, r *http.Request) {
+		getMetrics(pgdb, w, r)
 	})
 
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
@@ -40,13 +40,13 @@ func StartAPI(pgdb *pg.DB) *chi.Mux {
 	return r
 }
 
-func getMetrics(w http.ResponseWriter, r *http.Request) {
+func getMetrics(pgdb *pg.DB, w http.ResponseWriter, r *http.Request) {
 	queryParams := r.URL.Query()
 
-	// Retrieve from_int and to_ts query parameter values
-	from_int, err_from := strconv.ParseInt(queryParams.Get("from_ts"), 10, 64)
-	to_int, err_to := strconv.ParseInt(queryParams.Get("to_ts"), 10, 64)
-	if err_from != nil || err_to != nil {
+	// Retrieve fromInt and to_ts query parameter values
+	fromInt, errFrom := strconv.ParseInt(queryParams.Get("from_ts"), 10, 64)
+	toInt, errTo := strconv.ParseInt(queryParams.Get("to_ts"), 10, 64)
+	if errFrom != nil || errTo != nil {
 		res := &MetricsResponse{
 			Success: false,
 			Error:   "Timestamp range is not valid!",
@@ -60,26 +60,10 @@ func getMetrics(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Get db from ctx
-	pgdb, ok := r.Context().Value("DB").(*pg.DB)
-	if !ok {
-		res := &MetricsResponse{
-			Success: false,
-			Error:   "could not get DB from context",
-			Metrics: nil,
-		}
-		err := json.NewEncoder(w).Encode(res)
-		if err != nil {
-			log.Printf("error sending response %v\n", err)
-		}
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
-
 	// Call models package to access the database and return the metrics
-	from_ts := time.Unix(from_int*1000, 0)
-	to_ts := time.Unix(to_int*1000, 0)
-	metrics, err := models.GetMetrics(pgdb, from_ts, to_ts)
+	fromTs := time.Unix(fromInt*1000, 0)
+	toTs := time.Unix(toInt*1000, 0)
+	metrics, err := models.GetMetrics(pgdb, fromTs, toTs)
 	if err != nil {
 		res := &MetricsResponse{
 			Success: false,

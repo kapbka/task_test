@@ -9,13 +9,8 @@ import (
 )
 
 func StartDB() (*pg.DB, error) {
-	var (
-		opts *pg.Options
-		err  error
-	)
-
 	// Getting DB URL
-	opts, err = pg.ParseURL(os.Getenv("DATABASE_URL"))
+	opts, err := pg.ParseURL(os.Getenv("DATABASE_URL"))
 	if err != nil {
 		return nil, err
 	}

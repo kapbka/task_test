@@ -30,7 +30,7 @@ func main() {
 	interval := 60 * time.Millisecond
 
 	// Generate timestamps from 5 minutes ago to now
-	for t := fiveMinutesAgo; t.Before(now) || t.Equal(now); t = t.Add(interval) {
+	for t := fiveMinutesAgo; !t.After(now); t = t.Add(interval) {
 		_, err = models.InsertMetric(pgdb, &models.Metric{
 			Ts:          t,
 			CpuLoad:     randFloats(0, 100),
