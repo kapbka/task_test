@@ -17,6 +17,7 @@
       "request": "launch",
       "mode": "debug",
       "program": "${file}",
+      "cwd": "${workspaceFolder}",
       "env": {
         "DATABASE_URL": "postgresql://postgres:postgres@localhost/postgres?sslmode=disable",
         "PORT": "8080"

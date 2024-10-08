@@ -21,12 +21,12 @@ func InsertMetric(db *pg.DB, req *Metric) (bool, error) {
 	return true, err
 }
 
-func GetMetrics(db *pg.DB, from_ts time.Time, to_ts time.Time) ([]*Metric, error) {
+func GetMetrics(db *pg.DB, fromTs time.Time, toTs time.Time) ([]*Metric, error) {
 	// Query filtered results
 	metrics := make([]*Metric, 0)
 	err := db.Model(&metrics).
-		Where("ts >= ?", from_ts).
-		Where("ts <= ?", to_ts).
+		Where("ts >= ?", fromTs).
+		Where("ts <= ?", toTs).
 		Select()
 
 	return metrics, err
