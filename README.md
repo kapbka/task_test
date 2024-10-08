@@ -13,7 +13,9 @@
 ### API to query data
 `go build -o ./bin ./server`
 
-# Run locally
+# Run locally (Linux)
+* Install docker and docker compose
+
 * Set up Postgres DB
 
 `docker compose up db -d` 
