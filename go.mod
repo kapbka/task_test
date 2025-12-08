@@ -1,6 +1,6 @@
 module task_test
 
-go 1.18
+go 1.24.0
 
 require (
 	github.com/go-chi/chi/v5 v5.1.0
@@ -16,7 +16,7 @@ require (
 	github.com/vmihailenco/msgpack/v5 v5.3.4 // indirect
 	github.com/vmihailenco/tagparser v0.1.2 // indirect
 	github.com/vmihailenco/tagparser/v2 v2.0.0 // indirect
-	golang.org/x/crypto v0.21.0 // indirect
-	golang.org/x/sys v0.18.0 // indirect
+	golang.org/x/crypto v0.45.0 // indirect
+	golang.org/x/sys v0.38.0 // indirect
 	mellium.im/sasl v0.3.1 // indirect
 )
